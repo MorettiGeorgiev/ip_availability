@@ -6,12 +6,20 @@ public class Users {
 	public static Map<String, User> currentlyLoggedUsers = new HashMap<String, User>();
 	public static Map<String, User> usersToLogin = new HashMap<String, User>();
 	
-	public static void printCurrentlyLoggedUsers(){
-		System.out.print("ok:");
+	public static String getCurrentlyLoggedUsers(){
+		String users = "ok:";		
 		for (String username : currentlyLoggedUsers.keySet()) {
-		    System.out.print(username+":");
+		   users += username+":";
 		}
-		System.out.println();
+		return users;
+	}
+	
+	public static String getAbsentUsers(){
+		String users = "ok:";
+		for (User user : usersToLogin.values()) {
+		   if(!user.getLoggedIn()) users += user.getUsername()+":";
+		}
+		return users;
 	}
 	
 }

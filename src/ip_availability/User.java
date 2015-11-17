@@ -1,5 +1,4 @@
 package ip_availability;
-
 public class User {
 	
 	private String username;
@@ -16,12 +15,16 @@ public class User {
 		this.loggedInNum = loggedInNum;
 	}
 	
+	public String getUsername(){
+		return this.username;
+	}
+	
 	public boolean getLoggedIn(){
 		return this.loggedIn;
 	}
 
-	public void printInfo(){
-		System.out.println(this.username+":"+this.loggedIn+":"+this.loggedInNum);
+	public String getInfo(){
+		return(this.username+":"+this.loggedIn+":"+this.loggedInNum);
 	}
 	
 	public void login(){
@@ -31,15 +34,10 @@ public class User {
 			Users.usersToLogin.put(this.username , new User(this.username, this.loggedIn, this.loggedInNum));
 		}
 	
-	public static void logout(String username){
-			try{
+	public static void logout(String username) throws NullPointerException{
 			Users.usersToLogin.get(username).loggedIn = false;
 			Users.currentlyLoggedUsers.get(username).loggedIn = false;
 			Users.currentlyLoggedUsers.remove(username);
-			}
-			catch(NullPointerException e){
-				System.out.println("Ooops! You are not logged in.");
-			}
 			
 	}
 }

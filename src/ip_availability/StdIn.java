@@ -48,25 +48,25 @@ public class StdIn {
 			System.out.println("ok");
 	}
 	
-	public void info(){
-		try{
-			if(this.isLoogedIn()) Users.usersToLogin.get(this.cmdLineParts[2]).printInfo();
-			else System.out.println("Ooops! You are not logged in!");
-		}catch(NullPointerException e){
-			System.out.println("Ooops! No such user!");
-		}
-	}
-	
-	public void listavailable(){
-		if(this.isLoogedIn()) Users.printCurrentlyLoggedUsers();
-		else System.out.println("Ooops! You are not logged in!");
-	}
+//	public void info(){
+//		try{
+//			if(this.isLoogedIn()) Users.usersToLogin.get(this.cmdLineParts[2]).printInfo();
+//			else System.out.println("Ooops! You are not logged in!");
+//		}catch(NullPointerException e){
+//			System.out.println("Ooops! No such user!");
+//		}
+//	}
+//	
+//	public void listavailable(){
+//		if(this.isLoogedIn()) Users.printCurrentlyLoggedUsers();
+//		else System.out.println("Ooops! You are not logged in!");
+//	}
 	
 	public void executeCommand(){
 		if(this.command.equals("login")) this.login();
 		else if(this.command.equals("logout")) this.logout();
-		else if(this.command.equals("info")) this.info();
-		else if(this.command.equals("listavailable")) this.listavailable();
+//		else if(this.command.equals("info")) this.info();
+//		else if(this.command.equals("listavailable")) this.listavailable();
 		else System.out.println("Ooops! Unknow command!");
 	}
 }
