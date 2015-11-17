@@ -1,6 +1,4 @@
 package server;
-import ip_availability.User;
-import ip_availability.Users;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -12,11 +10,7 @@ public class ClientHandler implements Runnable{
 	private Server server;
 	private PrintStream out;
 	private Scanner scanner;
-	private String username = "";
-	private String command = "";
-	private String inputLine;
-	private String[] inputLineParts;
-
+	private Commands commands = new Commands();
 	public ClientHandler(Server server, Socket socket) {
  		this.socket = socket;
 		this.server = server;
@@ -27,87 +21,43 @@ public class ClientHandler implements Runnable{
 	}
 	
 	private void splitLine(String line){
-		inputLine = line;
-		inputLineParts = inputLine.split(":");
+		String inputLine = line;
+		commands.setInputLineParts(inputLine.split(":"));
+		String[] lineParts = commands.getInputLineParts();
 		try{
-			username = this.inputLineParts[0];
-			command = this.inputLineParts[1];
+			commands.setUsername(lineParts[0]);
+			commands.setCommand(lineParts[1]);
 		}
 		catch(ArrayIndexOutOfBoundsException e){
-			out.println("Ooops! Please enter 2 or more arguments.");
+			out.println("error: 2 or more arguments");
 		}	
 	}
 	
-	public boolean isLoogedIn(){
-		try{
-			Users.currentlyLoggedUsers.get(username).getLoggedIn();
-			return true;
-		}
-		catch(NullPointerException e){
-			return false;
-		}
-	}
-	
-	public void login(){
-		User user = Users.currentlyLoggedUsers.get(this.username);
-		if(user == null){
-			user = Users.usersToLogin.get(this.username);
-			if(user != null) user.login();
-			else{
-				user = new User(this.username);
-				user.login();
-			}
-			out.println("ok");
-		}else out.println("Ooops! You are already logged in!");
-	}
-	
-	public void logout(){
-		User.logout(username);
-		out.println("ok");
-	}
-	
-	public void info(){
-		try{
-			if(isLoogedIn()) out.print(Users.usersToLogin.get(this.inputLineParts[2]).getInfo());
-			else out.println("Ooops! You are not logged in!");
-		}catch(NullPointerException e){
-			out.println("Ooops! No such user!");
-		}
-	}
-	
-	public void listavailable(){
-		if(isLoogedIn()) out.println(Users.getCurrentlyLoggedUsers());
-		else out.println("error:notlogged");
-	}
-	
-	public void listabsent(){
-		if(isLoogedIn()) out.println(Users.getAbsentUsers());
-		else out.println("error:notlogged");
-	}
 	public void run() {
 		try {
 			out = new PrintStream(socket.getOutputStream());
+			commands.setOut(out);
 			scanner = new Scanner(socket.getInputStream());
 			out.println("Conected to: " + this.socket.getLocalSocketAddress());
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine(); 
 				splitLine(line);
-				if(command.equals("login")) this.login();
-				else if(this.command.equals("logout")){
+				if(commands.getCommand().equals("login")) commands.login();
+				else if(commands.getCommand().equals("logout")){
 					try{
-						this.logout();
+						commands.logout();
 					}catch(NullPointerException e){
-						out.println("Ooops! You are not logged in.");
+						out.println("error: notlogged");
 					}
 				}
-				else if(command.equals("info")) this.info();
-				else if(command.equals("listavailable")) this.listavailable();
-				else if(command.equals("listabsent")) this.listabsent();
-				else if (COMMAND_STOP_SERVER.equals(command)) {
+				else if(commands.getCommand().equals("info")) commands.info();
+				else if(commands.getCommand().equals("listavailable")) commands.listavailable();
+				else if(commands.getCommand().equals("listabsent")) commands.listabsent();
+				else if(commands.getCommand().equals("shutdown")) {
 					server.stopServer();
 					break;
 				}
-				else out.println("Ooops! Unknow command!");
+				else out.println("error: unknown command!");
 			}
 			scanner.close();
 			out.close();
