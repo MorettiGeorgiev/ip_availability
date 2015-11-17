@@ -5,12 +5,12 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientHandler implements Runnable{
-	private static final String COMMAND_STOP_SERVER = "shutdown";
 	private Socket socket;
 	private Server server;
 	private PrintStream out;
 	private Scanner scanner;
 	private Commands commands = new Commands();
+	
 	public ClientHandler(Server server, Socket socket) {
  		this.socket = socket;
 		this.server = server;

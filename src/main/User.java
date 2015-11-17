@@ -1,10 +1,14 @@
 package main;
+import java.time.LocalDateTime;
+
+
 public class User {
 	
 	private String username;
 	private boolean loggedIn = false;
 	private int loggedInNum = 0;
-	
+	private static String interval="";
+
 	public User(String username) {
 		this.username = username;
 	}
@@ -16,28 +20,31 @@ public class User {
 	}
 	
 	public String getUsername(){
-		return this.username;
+		return username;
 	}
 	
 	public boolean getLoggedIn(){
-		return this.loggedIn;
+		return loggedIn;
 	}
 
 	public String getInfo(){
-		return(this.username+":"+this.loggedIn+":"+this.loggedInNum);
+		String info = username+":"+loggedIn+":"+loggedInNum;
+		if(!loggedIn) info += interval;
+		return info;
 	}
 	
 	public void login(){
-			this.loggedIn = true;
-			this.loggedInNum++;
-			Users.currentlyLoggedUsers.put(this.username , new User(this.username, this.loggedIn, this.loggedInNum));
-			Users.usersToLogin.put(this.username , new User(this.username, this.loggedIn, this.loggedInNum));
+			loggedIn = true;
+			loggedInNum++;
+			Users.currentlyLoggedUsers.put(username , new User(username, loggedIn, loggedInNum));
+			Users.usersToLogin.put(this.username , new User(username, loggedIn, loggedInNum));
+			interval+=LocalDateTime.now()+":";
 		}
 	
 	public static void logout(String username) throws NullPointerException{
 			Users.usersToLogin.get(username).loggedIn = false;
 			Users.currentlyLoggedUsers.get(username).loggedIn = false;
 			Users.currentlyLoggedUsers.remove(username);
-			
+			interval+=LocalDateTime.now()+":";	
 	}
 }
