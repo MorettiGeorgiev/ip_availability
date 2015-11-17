@@ -43,13 +43,7 @@ public class ClientHandler implements Runnable{
 				String line = scanner.nextLine(); 
 				splitLine(line);
 				if(commands.getCommand().equals("login")) commands.login();
-				else if(commands.getCommand().equals("logout")){
-					try{
-						commands.logout();
-					}catch(NullPointerException e){
-						out.println("error: notlogged");
-					}
-				}
+				else if(commands.getCommand().equals("logout")) commands.logout();
 				else if(commands.getCommand().equals("info")) commands.info();
 				else if(commands.getCommand().equals("listavailable")) commands.listavailable();
 				else if(commands.getCommand().equals("listabsent")) commands.listabsent();

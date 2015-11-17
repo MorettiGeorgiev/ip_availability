@@ -38,7 +38,7 @@ public class Server {
 			ClientHandler client = new ClientHandler(this, socket);
 			clients.add(client);
 			new Thread(client).start();
-			System.out.println("Server is running :)");
+			System.out.println("Server is running..");
 		}
 	}
 

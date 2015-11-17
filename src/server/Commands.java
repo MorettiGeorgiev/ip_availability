@@ -64,8 +64,12 @@ public class Commands {
 	}
 	
 	public void logout(){
-		User.logout(username);
-		out.println("ok");
+		try{
+			User.logout(username);
+			out.println("ok");
+		}catch(NullPointerException e){
+			out.println("error: notlogged");
+		}
 	}
 	
 	public void info(){
